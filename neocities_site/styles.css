@@ -52,7 +52,7 @@ p {
 /* ── Three-column page grid ── */
 .wrapper {
   display: grid;
-  grid-template-columns: 200px 1fr 180px;
+  grid-template-columns: 200px 1fr 200px;
   gap: 12px;
   align-items: start;
 }
