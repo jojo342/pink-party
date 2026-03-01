@@ -97,22 +97,70 @@
           </div>
           <div class="window-content">
             <div class="music-player">
-              <div class="music-title">🎵 HiiiJack</div>
-              <audio id="player" src="HiiiJack.mp3" preload="none"></audio>
-              <button id="play-btn" class="play-btn" onclick="togglePlay()">▶ Play</button>
+              <div class="music-now-playing">♪ now playing</div>
+              <div class="music-title" id="music-title">HiiiJack</div>
+              <div class="music-artist" id="music-artist">SZA</div>
+              <div class="music-track-num" id="music-track-num">1 / 4</div>
+              <audio id="player" preload="none"></audio>
+              <div class="music-controls">
+                <button class="nav-btn" onclick="prevSong()">&#9664;&#9664;</button>
+                <button id="play-btn" class="play-btn" onclick="togglePlay()">&#9654; Play</button>
+                <button class="nav-btn" onclick="nextSong()">&#9654;&#9654;</button>
+              </div>
             </div>
             <script>
+              var songs = [
+                { title: 'HiiiJack',      artist: 'SZA',         src: 'HiiiJack.mp3'     },
+                { title: 'Flight',        artist: 'Vanita Renee', src: 'Flight.mp3'       },
+                { title: 'Nothing',       artist: 'Vanita Renee', src: 'Nothing.mp3'      },
+                { title: 'Sound of Rain', artist: 'Solange',      src: 'Sound-of-rain.mp3'}
+              ];
+              var current = 0;
+              var audio = document.getElementById('player');
+
+              function loadSong(index) {
+                var song = songs[index];
+                document.getElementById('music-title').textContent = song.title;
+                document.getElementById('music-artist').textContent = song.artist;
+                document.getElementById('music-track-num').textContent = (index + 1) + ' / ' + songs.length;
+                audio.src = song.src;
+                audio.load();
+                document.getElementById('play-btn').textContent = '\u25B6 Play';
+              }
+
               function togglePlay() {
-                var audio = document.getElementById('player');
                 var btn = document.getElementById('play-btn');
                 if (audio.paused) {
                   audio.play();
-                  btn.textContent = '⏸ Pause';
+                  btn.textContent = '\u23F8 Pause';
                 } else {
                   audio.pause();
-                  btn.textContent = '▶ Play';
+                  btn.textContent = '\u25B6 Play';
                 }
               }
+
+              function prevSong() {
+                var wasPlaying = !audio.paused;
+                current = (current - 1 + songs.length) % songs.length;
+                loadSong(current);
+                if (wasPlaying) { audio.play(); document.getElementById('play-btn').textContent = '\u23F8 Pause'; }
+              }
+
+              function nextSong() {
+                var wasPlaying = !audio.paused;
+                current = (current + 1) % songs.length;
+                loadSong(current);
+                if (wasPlaying) { audio.play(); document.getElementById('play-btn').textContent = '\u23F8 Pause'; }
+              }
+
+              audio.addEventListener('ended', function() {
+                current = (current + 1) % songs.length;
+                loadSong(current);
+                audio.play();
+                document.getElementById('play-btn').textContent = '\u23F8 Pause';
+              });
+
+              loadSong(0);
             </script>
           </div>
         </div>
