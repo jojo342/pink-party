@@ -96,8 +96,24 @@
             <div class="window-controls">− □ x</div>
           </div>
           <div class="window-content">
-            🎵 my fav song<br>
-            <small>by my fav artist</small>
+            <div class="music-player">
+              <div class="music-title">🎵 HiiiJack</div>
+              <audio id="player" src="HiiiJack.mp3" preload="none"></audio>
+              <button id="play-btn" class="play-btn" onclick="togglePlay()">▶ Play</button>
+            </div>
+            <script>
+              function togglePlay() {
+                var audio = document.getElementById('player');
+                var btn = document.getElementById('play-btn');
+                if (audio.paused) {
+                  audio.play();
+                  btn.textContent = '⏸ Pause';
+                } else {
+                  audio.pause();
+                  btn.textContent = '▶ Play';
+                }
+              }
+            </script>
           </div>
         </div>
 
