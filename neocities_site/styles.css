@@ -235,10 +235,41 @@ p {
   text-align: center;
 }
 
+.music-now-playing {
+  font-size: 10px;
+  color: #ff80bf;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
 .music-title {
   font-weight: bold;
+  font-size: 14px;
   color: #ff3399;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.music-artist {
+  font-size: 11px;
+  color: #cc6699;
+  margin-bottom: 2px;
+}
+
+.music-track-num {
+  font-size: 10px;
+  color: #ffb3d9;
   margin-bottom: 8px;
+}
+
+.music-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
 .play-btn {
@@ -249,11 +280,28 @@ p {
   font-family: "MS PGothic", "Trebuchet MS", sans-serif;
   font-size: 12px;
   font-weight: bold;
-  padding: 4px 14px;
+  padding: 4px 10px;
   box-shadow: 2px 2px 0 #ffcce6;
 }
 
 .play-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 #ffcce6;
+}
+
+.nav-btn {
+  background: linear-gradient(180deg, #ffcce6, #ffb3d9);
+  border: 2px solid #ff99cc;
+  border-radius: 4px;
+  color: #ff3399;
+  font-family: "MS PGothic", "Trebuchet MS", sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 4px 7px;
+  box-shadow: 2px 2px 0 #ffcce6;
+}
+
+.nav-btn:active {
   transform: translate(1px, 1px);
   box-shadow: 1px 1px 0 #ffcce6;
 }
