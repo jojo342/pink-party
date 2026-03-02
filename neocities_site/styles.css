@@ -49,6 +49,10 @@ p {
   color: #cc6699;
 }
 
+.site-header > a, .site-header > a:link, .site-header > a:visited, .site-header > a:hover, .site-header > a:active{
+  text-decoration: none;
+}
+
 /* ── Three-column page grid ── */
 .wrapper {
   display: grid;
