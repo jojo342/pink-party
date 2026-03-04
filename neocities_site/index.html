@@ -194,8 +194,31 @@
           </div>
           <div class="window-content" style="text-align:center;">
             🌸 you are visitor #<br>
-            <b style="font-size:18px;">00001</b>
+            <b style="font-size:18px;" id="visitor-count">00001</b>
           </div>
+          <script>
+            (function() {
+              var countEl = document.getElementById('visitor-count');
+              var namespace = 'pink-party-neocities';
+              var key = 'visitors';
+              var baseUrl = 'https://api.counterapi.dev/v1/' + namespace + '/' + key + '/';
+
+              function display(n) {
+                countEl.textContent = String(n).padStart(5, '0');
+              }
+
+              var endpoint = sessionStorage.getItem('vc_counted') ? 'get' : 'up';
+              fetch(baseUrl + endpoint)
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                  if (!sessionStorage.getItem('vc_counted')) {
+                    sessionStorage.setItem('vc_counted', '1');
+                  }
+                  display(data.count);
+                })
+                .catch(function() { /* keep default on error */ });
+            })();
+          </script>
         </div>
       </div>
 
