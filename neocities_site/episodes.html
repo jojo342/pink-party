@@ -35,7 +35,6 @@
           </div>
         </div>
 
-        <!-- Quick-jump by arc -->
         <div class="window">
           <div class="window-header">
             <span>Jump To</span>
@@ -43,8 +42,7 @@
           </div>
           <div class="window-content">
             <ul class="nav-links">
-              <li><a href="#arc1">Arc 1</a></li>
-              <!-- add more arcs as the story grows -->
+              <li><a href="#episode-map">📍 Episode Map</a></li>
             </ul>
           </div>
         </div>
@@ -79,31 +77,24 @@
           </div>
         </div>
 
-        <!-- Arc 1 -->
-        <div class="window" id="arc1">
+        <!-- Episode Map -->
+        <div class="window" id="episode-map">
           <div class="window-header">
-            <span>Arc 1 — [Arc Name]</span>
-            <div class="window-controls">− □ x</div>
+            <span>★ Episode Map</span>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <span id="ep-sync-time" style="font-size:10px; display:none;"></span>
+              <span id="ep-sync-error" style="font-size:10px; color:#ffd700; display:none;"></span>
+              <button class="sync-btn" id="ep-sync-btn" onclick="epDoSync()">↻ Sync Notion</button>
+              <div class="window-controls">− □ x</div>
+            </div>
           </div>
-          <div class="window-content">
-
-            <!-- Episode template — copy this block to add new episodes -->
-            <div class="episode-card">
-              <div class="episode-number">Episode 01</div>
-              <div class="episode-title"><a href="#">[Episode Title]</a></div>
-              <div class="episode-meta">Posted: 02/27/2026 &nbsp;·&nbsp; [word count] words</div>
-              <div class="episode-blurb">[A short summary or teaser line for this episode. Keep it spoiler-light!]</div>
-              <div style="margin-top:6px;">
-                <span class="tag">[tag]</span>
-                <span class="tag">[tag]</span>
-              </div>
+          <!-- Legend bar -->
+          <div class="ep-legend" id="ep-legend"></div>
+          <!-- Map area -->
+          <div class="window-content" style="padding:12px 8px;">
+            <div class="ep-map-scroll">
+              <div id="ep-map-area"></div>
             </div>
-            <!-- /Episode template -->
-
-            <div style="text-align:center; color:#cc99b3; font-size:12px; padding-top:4px;">
-              More episodes coming soon... 🚧
-            </div>
-
           </div>
         </div>
 
@@ -130,10 +121,10 @@
           </div>
           <div class="window-content" style="text-align:center;">
             📖 Total episodes:<br>
-            <b style="font-size:20px; color:#ff3399;">01</b>
+            <b id="ep-count" style="font-size:20px; color:#ff3399;">—</b>
             <br><br>
             🌸 Last updated:<br>
-            <span style="font-size:12px;">02/27/2026</span>
+            <span id="ep-last-updated" style="font-size:12px;">—</span>
           </div>
         </div>
 
@@ -149,5 +140,384 @@
       </div>
 
     </div><!-- /.wrapper -->
+
+    <!-- ── Episode Popup ── -->
+    <div class="ep-popup-overlay" id="ep-popup-overlay" style="display:none;" onclick="epClosePopup()">
+      <div class="ep-popup" onclick="event.stopPropagation()">
+        <div class="ep-popup-type" id="ep-popup-type"></div>
+        <div class="ep-popup-title" id="ep-popup-title"></div>
+        <div class="ep-popup-arc" id="ep-popup-arc"></div>
+        <div class="ep-popup-btns" id="ep-popup-btns"></div>
+      </div>
+    </div>
+
+    <script>
+    // ── FALLBACK DATA ─────────────────────────────────────────────────────
+    const EP_INITIAL_DATA = {
+      seasons: [
+        {
+          number: 1,
+          arcs: [
+            {
+              name: "Opening", icon: "✨", color: "#ff6eb4", bgColor: "#fff0f8", borderColor: "#ffb3d9",
+              episodes: [
+                { title: "Shifting Sands & Divine Sparks", type: "episode", url: "https://www.notion.so/2d13d5fe92ea80719a51dccd0fde691f" }
+              ]
+            },
+            {
+              name: "Moyo", icon: "🏙️", color: "#e0548e", bgColor: "#fff5fb", borderColor: "#ffc2e0",
+              episodes: [
+                { title: "Heartfelt", type: "episode", url: "https://www.notion.so/2d13d5fe92ea8026841bcfb00d6586d3" }
+              ]
+            },
+            {
+              name: "Sa'har", icon: "🌙", color: "#9b5de5", bgColor: "#fdf4ff", borderColor: "#d8b4fe",
+              episodes: [
+                { title: "The Lion and the Veil", type: "episode", url: "https://www.notion.so/2d13d5fe92ea80d380f7df40b2d36eb6" },
+                { title: "The Fourteenth", type: "episode", url: "https://www.notion.so/2d13d5fe92ea807fbc18c04068aa658f" }
+              ]
+            },
+            {
+              name: "Oaxaca", icon: "🌵", color: "#f97316", bgColor: "#fff8f5", borderColor: "#fed7aa",
+              episodes: [
+                { title: "Seduction and Chains", type: "episode", url: "https://www.notion.so/2d13d5fe92ea80f7afc2e15773f90515" },
+                { title: "Chains and Chances", type: "episode", url: "https://www.notion.so/2d13d5fe92ea8063a633c1f9b02ad225" },
+                { title: "Breaking Bread", type: "skip", url: "https://www.notion.so/3003d5fe92ea80f5877bd79651f571e0" },
+                { title: "Road to Zonia", type: "skip", url: "https://www.notion.so/2d63d5fe92ea8003b34bcfd6a7042871" }
+              ]
+            },
+            {
+              name: "Zonia", icon: "⚡", color: "#3b82f6", bgColor: "#f0f7ff", borderColor: "#bfdbfe",
+              episodes: [
+                { title: "The Leilani Problem", type: "filler", url: "https://www.notion.so/30d3d5fe92ea802f977fc1cd8bff1431" }
+              ]
+            },
+            {
+              name: "Kaldur", icon: "❄️", color: "#06b6d4", bgColor: "#f0fafe", borderColor: "#a5f3fc",
+              episodes: [
+                { title: "Frostbite & Flustered", type: "skip", url: null },
+                { title: "The Courtesan's Gambit", type: "skip", url: null },
+                { title: "The Palace of Hollow Eyes", type: "episode", url: "https://www.notion.so/2d73d5fe92ea80fdb35cd4086f00c7a3" },
+                { title: "Carnival Lights", type: "skip", url: null },
+                { title: "The Cold and the Coddled", type: "skip", url: null },
+                { title: "The First Happy Birthday", type: "skip", url: null }
+              ]
+            },
+            {
+              name: "Oaxaca (Again)", icon: "🌅", color: "#d97706", bgColor: "#fffbf0", borderColor: "#fde68a",
+              episodes: [
+                { title: "Mantu", type: "filler", url: "https://www.notion.so/2de3d5fe92ea8018928fe04123906b58" },
+                { title: "The Call from Eden", type: "episode", url: "https://www.notion.so/2e63d5fe92ea8046bf3ce90a29730c5f" },
+                { title: "Sand and Sauna", type: "skip", url: "https://www.notion.so/2fa3d5fe92ea80b48800c7879ada6bcc" },
+                { title: "Blood and Bonds", type: "episode", url: "https://www.notion.so/2d13d5fe92ea8071a648d16291b33f2e" },
+                { title: "The Assignment", type: "skip", url: "https://www.notion.so/3093d5fe92ea80798a62f0ece4cd5d58" }
+              ]
+            },
+            {
+              name: "Mahaica", icon: "🌊", color: "#059669", bgColor: "#f0fff8", borderColor: "#a7f3d0",
+              episodes: [
+                { title: "Starlight Before the Storm", type: "episode", url: null },
+                { title: "Stalemate", type: "episode", url: "https://www.notion.so/2de3d5fe92ea8094861ef70b01226a45" },
+                { title: "The Prince and the Performance", type: "episode", url: null },
+                { title: "Sands of Home", type: "skip", url: "https://www.notion.so/2f43d5fe92ea80ddaddfd690b161de14" },
+                { title: "Marked", type: "skip", url: null },
+                { title: "Beach Day", type: "filler", url: "https://www.notion.so/2d13d5fe92ea80899b40dfb06930efc2" },
+                { title: "The Prince, the Prodigy, and the Palmed Ace", type: "skip", url: null }
+              ]
+            },
+            {
+              name: "Eden", icon: "👑", color: "#be185d", bgColor: "#fff0f9", borderColor: "#f9a8d4",
+              episodes: [
+                { title: "The Grand Return", type: "skip", url: null }
+              ]
+            }
+          ]
+        }
+      ]
+    };
+
+    const EP_TYPE_CONFIG = {
+      episode: { icon: "★", label: "Episode",  color: "#ff3399" },
+      filler:  { icon: "♡", label: "Filler",   color: "#c084fc" },
+      skip:    { icon: "⊘", label: "WIP/Skip", color: "#cc99b3" }
+    };
+
+    // ── Notion sync via Anthropic API ────────────────────────────────────
+    async function epFetchFromNotion() {
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 4000,
+          system: "You are a JSON data extractor. When given a task, use the Notion tool to fetch the page, then return ONLY valid raw JSON — no markdown, no backticks, no preamble, no postamble. Just the JSON object.",
+          messages: [{
+            role: "user",
+            content: `Fetch this Notion page: https://www.notion.so/812568760f99472db86c2b2431cd7d75
+
+After fetching, return ONLY a raw JSON object (no markdown) with this exact structure:
+{
+  "seasons": [
+    {
+      "number": 1,
+      "arcs": [
+        {
+          "name": "Short arc name (e.g. Moyo, Sa'har, Kaldur, Eden)",
+          "icon": "one emoji fitting the arc theme",
+          "color": "#hex (a vibrant color fitting the arc)",
+          "bgColor": "#hex (very light tint of color)",
+          "borderColor": "#hex (light border tint)",
+          "episodes": [
+            { "title": "Episode title (clean, no SKIP/WIP tags)", "type": "episode|filler|skip", "url": "notion url or null" }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+RULES:
+- type = "skip" if title has SKIP or WIP in it
+- type = "filler" if title starts with Filler:
+- type = "episode" for everything else
+- url = the notion page link only if the episode has a linked page, else null
+- Strip prefixes like "Episode:", "Filler:", "Scene:" from titles
+- First arc for Season 1 is "Opening" containing Episode 1
+- Do NOT include bullet points that are just notes (like "Defeat Lust" or "Escape Sa'har")
+- Season 2 episodes are all in one arc called "New Horizons"`
+          }],
+          mcp_servers: [{ type: "url", url: "https://mcp.notion.com/mcp", name: "notion" }]
+        })
+      });
+      const apiData = await res.json();
+      const text = (apiData.content || []).filter(b => b.type === "text").map(b => b.text).join("");
+      const match = text.match(/\{[\s\S]*\}/);
+      if (!match) throw new Error("No JSON found");
+      const parsed = JSON.parse(match[0]);
+      if (!parsed.seasons) throw new Error("Invalid structure");
+      return parsed;
+    }
+
+    // ── Render legend bar ────────────────────────────────────────────────
+    function epRenderLegend(data) {
+      const allEps = data.seasons.flatMap(s => s.arcs.flatMap(a => a.episodes));
+      const total  = allEps.filter(e => e.type !== "skip").length;
+      const legend = document.getElementById("ep-legend");
+
+      const countEl = document.createElement("span");
+      countEl.className = "ep-legend-item";
+      countEl.innerHTML = `<b style="color:#ff3399;">✦ ${total} episodes</b>`;
+      legend.innerHTML = "";
+      legend.appendChild(countEl);
+
+      Object.entries(EP_TYPE_CONFIG).forEach(([type, cfg]) => {
+        const item = document.createElement("span");
+        item.className = "ep-legend-item";
+        const dot = document.createElement("span");
+        dot.className = "ep-legend-dot";
+        dot.style.background = cfg.color;
+        dot.textContent = cfg.icon;
+        item.appendChild(dot);
+        item.appendChild(document.createTextNode(cfg.label));
+        legend.appendChild(item);
+      });
+
+      const hint = document.createElement("span");
+      hint.style.cssText = "font-size:10px; color:#cc99b3; margin-left:auto;";
+      hint.textContent = "click any node for details";
+      legend.appendChild(hint);
+    }
+
+    // ── Render map ───────────────────────────────────────────────────────
+    function epRenderMap(data) {
+      const mapArea = document.getElementById("ep-map-area");
+      mapArea.innerHTML = "";
+
+      data.seasons.forEach((season, sIdx) => {
+        // Season banner
+        const banner = document.createElement("div");
+        banner.className = "ep-season-banner";
+        banner.innerHTML = `<span class="ep-season-label">Season ${season.number}</span><div class="ep-season-rule"></div>`;
+        if (sIdx > 0) banner.style.marginTop = "24px";
+        mapArea.appendChild(banner);
+
+        // Arc row
+        const row = document.createElement("div");
+        row.className = "ep-arc-row";
+
+        season.arcs.forEach((arc, arcIdx) => {
+          // Arc column
+          const col = document.createElement("div");
+          col.className = "ep-arc-col";
+
+          // Arc header
+          const header = document.createElement("div");
+          header.className = "ep-arc-header";
+          header.style.cssText = `background: ${arc.bgColor}; border: 2px solid ${arc.borderColor}; border-bottom: 3px solid ${arc.color};`;
+          header.innerHTML = `
+            <div class="ep-arc-header-icon">${arc.icon}</div>
+            <div class="ep-arc-header-name" style="color:${arc.color};">${arc.name.toUpperCase()}</div>
+          `;
+
+          // Episode list
+          const epList = document.createElement("div");
+          epList.className = "ep-arc-episodes";
+          epList.style.cssText = `background:${arc.bgColor}; border: 2px solid ${arc.borderColor};`;
+
+          // Dotted path line
+          const path = document.createElement("div");
+          path.className = "ep-arc-path";
+          path.style.background = `repeating-linear-gradient(to bottom, ${arc.color} 0px, ${arc.color} 4px, transparent 4px, transparent 8px)`;
+          epList.appendChild(path);
+
+          arc.episodes.forEach(ep => {
+            const node = document.createElement("div");
+            node.className = "ep-node" + (ep.type === "skip" ? " skip" : "");
+            if (ep.type !== "skip") {
+              node.style.borderColor = arc.color + "44";
+              node.style.boxShadow = `2px 2px 0 ${arc.color}22`;
+            }
+
+            const dotColor = ep.type === "episode" ? arc.color
+                           : ep.type === "filler"  ? EP_TYPE_CONFIG.filler.color
+                           : EP_TYPE_CONFIG.skip.color;
+
+            const dot = document.createElement("span");
+            dot.className = "ep-node-dot";
+            dot.style.cssText = `background:${dotColor}; box-shadow: 0 0 0 1.5px ${dotColor};`;
+            dot.textContent = EP_TYPE_CONFIG[ep.type].icon;
+
+            const titleSpan = document.createElement("span");
+            titleSpan.className = "ep-node-title";
+            titleSpan.style.color = ep.type === "skip" ? "#cc99b3" : "#4a1942";
+            titleSpan.style.fontWeight = ep.type === "episode" ? "bold" : "600";
+            titleSpan.textContent = ep.title;
+
+            if (ep.url && ep.type !== "skip") {
+              const linkDot = document.createElement("span");
+              linkDot.className = "ep-node-link-dot";
+              linkDot.style.color = arc.color;
+              linkDot.textContent = "⬡";
+              titleSpan.appendChild(linkDot);
+            }
+
+            node.appendChild(dot);
+            node.appendChild(titleSpan);
+            node.addEventListener("click", () => epShowPopup({ ...ep, _arcName: arc.name }));
+            epList.appendChild(node);
+          });
+
+          col.appendChild(header);
+          col.appendChild(epList);
+          row.appendChild(col);
+
+          // Arrow between arcs
+          if (arcIdx < season.arcs.length - 1) {
+            const arrow = document.createElement("div");
+            arrow.className = "ep-arc-arrow";
+            arrow.textContent = "→";
+            row.appendChild(arrow);
+          }
+        });
+
+        mapArea.appendChild(row);
+      });
+    }
+
+    // ── Popup ────────────────────────────────────────────────────────────
+    function epShowPopup(ep) {
+      const cfg = EP_TYPE_CONFIG[ep.type];
+      document.getElementById("ep-popup-type").textContent  = cfg.icon + " " + cfg.label;
+      document.getElementById("ep-popup-type").style.background = cfg.color;
+      document.getElementById("ep-popup-title").textContent = ep.title;
+      document.getElementById("ep-popup-arc").textContent   = ep._arcName ? "📍 " + ep._arcName : "";
+
+      const btns = document.getElementById("ep-popup-btns");
+      btns.innerHTML = "";
+
+      if (ep.url) {
+        const link = document.createElement("a");
+        link.href   = ep.url;
+        link.target = "_blank";
+        link.rel    = "noopener noreferrer";
+        link.className = "play-btn";
+        link.style.textDecoration = "none";
+        link.textContent = "📖 Read on Notion";
+        btns.appendChild(link);
+      } else {
+        const noPage = document.createElement("span");
+        noPage.style.cssText = "background:#ffcce6; color:#cc6699; border:1px solid #ff99cc; border-radius:6px; padding:6px 12px; font-size:11px; font-weight:bold;";
+        noPage.textContent = "📝 No page yet";
+        btns.appendChild(noPage);
+      }
+
+      const closeBtn = document.createElement("button");
+      closeBtn.className = "nav-btn";
+      closeBtn.textContent = "✕ Close";
+      closeBtn.onclick = epClosePopup;
+      btns.appendChild(closeBtn);
+
+      document.getElementById("ep-popup-overlay").style.display = "flex";
+    }
+
+    function epClosePopup() {
+      document.getElementById("ep-popup-overlay").style.display = "none";
+    }
+
+    // Close popup on Escape key
+    document.addEventListener("keydown", e => { if (e.key === "Escape") epClosePopup(); });
+
+    // ── Sidebar update ───────────────────────────────────────────────────
+    function epUpdateSidebar(data) {
+      const total = data.seasons.flatMap(s => s.arcs.flatMap(a => a.episodes)).filter(e => e.type !== "skip").length;
+      const countEl = document.getElementById("ep-count");
+      if (countEl) countEl.textContent = String(total).padStart(2, "0");
+
+      const dateEl = document.getElementById("ep-last-updated");
+      if (dateEl) {
+        const now = new Date();
+        dateEl.textContent = now.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" });
+      }
+    }
+
+    // ── Sync ─────────────────────────────────────────────────────────────
+    let epCurrentData = EP_INITIAL_DATA;
+
+    async function epDoSync() {
+      const btn       = document.getElementById("ep-sync-btn");
+      const timeEl    = document.getElementById("ep-sync-time");
+      const errorEl   = document.getElementById("ep-sync-error");
+
+      btn.disabled    = true;
+      btn.textContent = "↻ Syncing...";
+      errorEl.style.display = "none";
+
+      try {
+        const fresh = await epFetchFromNotion();
+        epCurrentData = fresh;
+        epRenderLegend(fresh);
+        epRenderMap(fresh);
+        epUpdateSidebar(fresh);
+        const t = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        timeEl.textContent  = "synced " + t;
+        timeEl.style.display = "inline";
+      } catch (e) {
+        errorEl.textContent  = "Sync failed — showing cached data";
+        errorEl.style.display = "inline";
+      } finally {
+        btn.disabled    = false;
+        btn.textContent = "↻ Sync Notion";
+      }
+    }
+
+    // ── Init ─────────────────────────────────────────────────────────────
+    document.addEventListener("DOMContentLoaded", () => {
+      epRenderLegend(EP_INITIAL_DATA);
+      epRenderMap(EP_INITIAL_DATA);
+      epUpdateSidebar(EP_INITIAL_DATA);
+      epDoSync();
+    });
+    </script>
+
   </body>
 </html>
