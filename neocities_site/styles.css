@@ -315,6 +315,104 @@ p {
   box-shadow: 1px 1px 0 #ffcce6;
 }
 
+/* ── Episode Map (episodes.html) ── */
+.ep-map-scroll { overflow-x: auto; padding-bottom: 8px; }
+.ep-arc-row    { display: flex; align-items: flex-start; min-width: max-content; }
+.ep-arc-col    { width: 185px; flex-shrink: 0; }
+
+.ep-arc-header {
+  border-radius: 6px 6px 0 0;
+  padding: 6px 8px;
+  text-align: center;
+}
+.ep-arc-header-icon { font-size: 16px; line-height: 1; }
+.ep-arc-header-name { font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+.ep-arc-episodes {
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  position: relative;
+}
+.ep-arc-path {
+  position: absolute;
+  left: 16px; top: 14px; bottom: 14px;
+  width: 2px;
+  border-radius: 1px;
+}
+
+.ep-node {
+  display: flex; align-items: flex-start; gap: 6px;
+  padding: 4px 6px; border-radius: 6px; cursor: pointer;
+  background: #fff;
+  border: 1px solid #ffcce6;
+  box-shadow: 2px 2px 0 #ffcce6;
+  transition: transform 0.12s, box-shadow 0.12s;
+  position: relative; z-index: 1;
+}
+.ep-node:hover { transform: translateY(-1px); box-shadow: 2px 3px 0 #ffb3d9; }
+.ep-node.skip  { opacity: 0.45; background: transparent; border-color: transparent; box-shadow: none; }
+.ep-node.skip .ep-node-title { text-decoration: line-through; }
+
+.ep-node-dot {
+  width: 18px; height: 18px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 9px; font-weight: bold;
+  flex-shrink: 0; border: 2px solid #fff;
+}
+.ep-node-title    { font-size: 10px; line-height: 1.3; flex: 1; padding-top: 1px; }
+.ep-node-link-dot { font-size: 8px; margin-left: 3px; }
+
+.ep-arc-arrow {
+  display: flex; align-items: flex-start;
+  padding: 40px 3px 0; color: #ff3399; font-size: 16px; font-weight: bold; flex-shrink: 0;
+}
+
+.ep-legend {
+  background: #fff5fb; border-bottom: 1px dashed #ffcce6;
+  padding: 6px 12px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+}
+.ep-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #cc6699; font-weight: bold; }
+.ep-legend-dot  { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 9px; font-weight: bold; }
+
+.ep-season-banner { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.ep-season-label  {
+  background: linear-gradient(90deg, #ff80bf, #ffb3d9);
+  color: #fff; font-size: 10px; font-weight: bold; text-transform: uppercase;
+  letter-spacing: 1px; padding: 4px 12px; border-radius: 20px;
+  border: 2px solid #ff99cc; box-shadow: 2px 2px 0 #ffcce6; white-space: nowrap;
+}
+.ep-season-rule { flex: 1; height: 1px; background: linear-gradient(90deg, #ffcce6, transparent); }
+
+.ep-popup-overlay {
+  position: fixed; inset: 0;
+  background: rgba(255,182,219,0.4);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000; padding: 20px;
+}
+.ep-popup {
+  background: #fff; border: 2px solid #ff99cc; border-radius: 8px;
+  box-shadow: 3px 3px 0 #ffcce6; padding: 20px; max-width: 360px; width: 100%;
+}
+.ep-popup-type  { display: inline-block; border-radius: 20px; padding: 2px 10px; font-size: 10px; font-weight: bold; color: #fff; margin-bottom: 8px; }
+.ep-popup-title { font-size: 13px; font-weight: bold; color: #ff3399; margin-bottom: 6px; line-height: 1.4; }
+.ep-popup-arc   { font-size: 11px; color: #cc99b3; margin-bottom: 14px; }
+.ep-popup-btns  { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.sync-btn {
+  background: linear-gradient(180deg, #ffb3d9, #ff80bf);
+  border: 2px solid #ff99cc; border-radius: 4px;
+  color: #fff; font-family: "MS PGothic","Trebuchet MS",sans-serif;
+  font-size: 11px; font-weight: bold; padding: 3px 9px;
+  box-shadow: 2px 2px 0 #ffcce6; cursor: pointer;
+}
+.sync-btn:hover    { background: linear-gradient(180deg, #ff80bf, #ff3399); }
+.sync-btn:active   { transform: translate(1px,1px); box-shadow: 1px 1px 0 #ffcce6; }
+.sync-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
 /* ── Responsive layout ── */
 
 /* Tablet: 2-column (left sidebar + stacked content) */
