@@ -15,131 +15,37 @@
         <h1>💖 Pink Party 💖</h1>
       </a>
       <div class="tagline">home of Project Coexist ♡</div>
+      <nav class="site-nav">
+        <a href="index.html">🏠 Home</a>
+        <a href="episodes.html">📖 Episodes</a>
+        <a href="art.html">🎨 Art</a>
+      </nav>
     </div>
 
-    <div class="wrapper">
-
-      <!-- ── LEFT COLUMN: nav ── -->
-      <div class="left-col">
-        <div class="window">
-          <div class="window-header">
-            <span>Navigation</span>
-            <div class="window-controls">− □ x</div>
-          </div>
-          <div class="window-content">
-            <ul class="nav-links">
-              <li><a href="index.html">🏠 Home</a></li>
-              <li><a href="episodes.html">📖 Episodes</a></li>
-              <li><a href="art.html">🎨 Art</a></li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="window">
-          <div class="window-header">
-            <span>Jump To</span>
-            <div class="window-controls">− □ x</div>
-          </div>
-          <div class="window-content">
-            <ul class="nav-links">
-              <li><a href="#episode-map">📍 Episode Map</a></li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="window">
-          <div class="window-header">
-            <span>Content Notes</span>
-            <div class="window-controls">− □ x</div>
-          </div>
-          <div class="window-content" style="font-size:12px;">
-            ⚠️ Each episode lists its own content warnings. Please read them before diving in!
-          </div>
+    <!-- ── Full-width Episode Map ── -->
+    <div class="ep-page-frame" id="episode-map">
+      <div class="ep-page-header">
+        <div class="ep-page-title">✦ Project Coexist — Episode Map ✦</div>
+        <div style="display:flex; gap:6px; align-items:center;">
+          <span id="ep-sync-time" style="font-size:10px; display:none;"></span>
+          <span id="ep-sync-error" style="font-size:10px; color:#ffd700; display:none;"></span>
+          <button class="sync-btn" id="ep-sync-btn" onclick="epDoSync()">↻ Sync Notion</button>
         </div>
       </div>
-
-      <!-- ── CENTRE COLUMN: episode list ── -->
-      <div class="centre-col">
-
-        <!-- About the project -->
-        <div class="window">
-          <div class="window-header">
-            <span>About Project Coexist</span>
-            <div class="window-controls">− □ x</div>
-          </div>
-          <div class="window-content">
-            <p>
-              <b>Project Coexist</b> is a fantasy/adventure/romance story that will be adapted to a webtoon. New episodes are posted as they're finished — no set schedule, but I try to update regularly!
-            </p>
-            <p style="font-size:12px; color:#cc99b3;">
-              ★ The series is currently ongoing ★
-            </p>
-          </div>
-        </div>
-
-        <!-- Episode Map -->
-        <div class="window" id="episode-map">
-          <div class="window-header">
-            <span>★ Episode Map</span>
-            <div style="display:flex; gap:6px; align-items:center;">
-              <span id="ep-sync-time" style="font-size:10px; display:none;"></span>
-              <span id="ep-sync-error" style="font-size:10px; color:#ffd700; display:none;"></span>
-              <button class="sync-btn" id="ep-sync-btn" onclick="epDoSync()">↻ Sync Notion</button>
-              <div class="window-controls">− □ x</div>
-            </div>
-          </div>
-          <!-- Legend bar -->
-          <div class="ep-legend" id="ep-legend"></div>
-          <!-- Map area -->
-          <div class="window-content" style="padding:12px 8px;">
-            <div class="ep-map-scroll">
-              <div id="ep-map-area"></div>
-            </div>
-          </div>
-        </div>
-
+      <!-- Legend bar -->
+      <div class="ep-legend" id="ep-legend"></div>
+      <!-- Info bar -->
+      <div class="ep-info-bar">
+        <span>⚠️ Each episode lists its own content warnings — please read before diving in!</span>
+        <span style="margin-left:auto;">★ Series is currently ongoing · 📖 Read in order · <a href="ocs.html">meet the cast</a></span>
       </div>
-
-      <!-- ── RIGHT COLUMN: extras ── -->
-      <div class="right-col">
-        <div class="window">
-          <div class="window-header">
-            <span>Reading Tips</span>
-            <div class="window-controls">− □ x</div>
-          </div>
-          <div class="window-content" style="font-size:12px;">
-            📖 Read in episode order<br>
-            💬 Feel free to share thoughts in the guestbook!<br>
-            🔖 Bookmark this page to check for updates
-          </div>
-        </div>
-
-        <div class="window">
-          <div class="window-header">
-            <span>Episode Count</span>
-            <div class="window-controls">− □ x</div>
-          </div>
-          <div class="window-content" style="text-align:center;">
-            📖 Total episodes:<br>
-            <b id="ep-count" style="font-size:20px; color:#ff3399;">—</b>
-            <br><br>
-            🌸 Last updated:<br>
-            <span id="ep-last-updated" style="font-size:12px;">—</span>
-          </div>
-        </div>
-
-        <div class="window">
-          <div class="window-header">
-            <span>Characters</span>
-            <div class="window-controls">− □ x</div>
-          </div>
-          <div class="window-content" style="font-size:12px;">
-            Meet the cast on the <a href="ocs.html">OCs page</a>! ♡
-          </div>
-        </div>
+      <!-- Map area -->
+      <div class="ep-map-scroll" style="padding:16px 12px;">
+        <div id="ep-map-area"></div>
       </div>
-
-    </div><!-- /.wrapper -->
+      <!-- Footer -->
+      <div class="ep-page-footer">✦ project coexist by jo ✦</div>
+    </div>
 
     <!-- ── Episode Popup ── -->
     <div class="ep-popup-overlay" id="ep-popup-overlay" style="display:none;" onclick="epClosePopup()">

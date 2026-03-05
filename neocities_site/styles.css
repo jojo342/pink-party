@@ -413,6 +413,76 @@ p {
 .sync-btn:active   { transform: translate(1px,1px); box-shadow: 1px 1px 0 #ffcce6; }
 .sync-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
+/* ── Horizontal site nav (episodes.html) ── */
+.site-nav {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+.site-nav a {
+  color: #ff3399;
+  text-decoration: none;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid #ffb3d9;
+  background: #fff0f8;
+  transition: background 0.12s;
+}
+.site-nav a:hover { background: #ffcce6; }
+
+/* ── Full-width episode map page (episodes.html redesign) ── */
+.ep-page-frame {
+  background: #fff;
+  border: 2px solid #ff99cc;
+  border-radius: 8px;
+  box-shadow: 3px 3px 0 #ffcce6;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.ep-page-header {
+  background: linear-gradient(90deg, #ff3399, #ff80bf, #ffb3d9);
+  color: #fff;
+  padding: 10px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #ff99cc;
+}
+
+.ep-page-title {
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.15);
+}
+
+.ep-info-bar {
+  background: #fff5fb;
+  border-bottom: 1px dashed #ffcce6;
+  padding: 5px 14px;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: #cc99b3;
+}
+
+.ep-page-footer {
+  text-align: center;
+  padding: 8px;
+  font-size: 11px;
+  color: #cc6699;
+  border-top: 1px dashed #ffcce6;
+  background: #fff5fb;
+  letter-spacing: 1px;
+}
+
 /* ── Responsive layout ── */
 
 /* Tablet: 2-column (left sidebar + stacked content) */
