@@ -4,7 +4,7 @@
 
 * {
   box-sizing: border-box;
-  cursor: url(https://cur.cursors-4u.net/nature/nat-10/nat988.cur), auto !important;
+  cursor: url("data:image/webp;base64,UklGRrYAAABXRUJQVlA4TKkAAAAvH8AHEC9AFmAyf4/xhNAZRhoCgqLhviMSIOH/ECZZrb5w/gP4HzVTYQLk2nYaRn+jApwKiAXYHypA7HWM1H8xBMeZdUT/JyDw7EGeak9RnmpPUZ4JrOfcnrCnYIKIzkI6wI4nAXA9+eiw4QOwO1UG9cZmYWSZkLye8lKJzKgLiVq1JurIkrqHa3KM1Kubhk4QVZsVDZmYUpCLY8aObYbcAKO8wQRA4H8IAA=="), auto !important;
 }
 
 html {
