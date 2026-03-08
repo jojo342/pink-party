@@ -359,4 +359,19 @@ p {
   .gallery-grid {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
+
+  /* Episode page: hide low-priority sidebar windows */
+  .episode-content-notes,
+  .episode-nav-sidebar {
+    display: none;
+  }
+
+  /* Episode body text: bigger and roomier */
+  .episode-body {
+    font-size: 15px !important;
+  }
+
+  .window-content {
+    padding: 16px;
+  }
 }
